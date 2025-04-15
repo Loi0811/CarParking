@@ -1,0 +1,17 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_parking"
+        android:icon="@drawable/ic_parking"
+        android:title="Parking"
+        android:iconTint="@color/dark_gray"/>
+    <item
+        android:id="@+id/nav_camera"
+        android:icon="@drawable/ic_camera"
+        android:title="Camera"
+        android:iconTint="@color/dark_gray"/>
+    <item
+        android:id="@+id/nav_history"
+        android:icon="@drawable/ic_history"
+        android:title="History"
+        android:iconTint="@color/dark_gray"/>
+</menu>

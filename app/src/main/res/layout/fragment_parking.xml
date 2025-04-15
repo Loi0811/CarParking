@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <TextView
+        android:padding="16dp"
+        android:id="@+id/count_text"
+        android:textSize="20sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Number Car in Parking: 3"
+        android:textColor="@color/light_gray"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:background="@color/dark_gray"/>
+
+    <ListView
+        android:id="@+id/parking_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="16dp"
+        android:scrollbars="none"/>
+
+</LinearLayout>
