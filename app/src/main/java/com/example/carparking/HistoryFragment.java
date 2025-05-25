@@ -14,6 +14,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -32,8 +33,16 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 
 public class HistoryFragment extends Fragment {
@@ -47,6 +56,10 @@ public class HistoryFragment extends Fragment {
     private boolean lastEntryFilter = true;
     private boolean lastExitFilter = true;
     private boolean lastFirstTimeFilter = false;
+    private Button btnRefresh; // Thêm biến toàn cục cho nút refresh
+
+    private OkHttpClient client = new OkHttpClient();
+    private Gson gson = new Gson();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -55,6 +68,7 @@ public class HistoryFragment extends Fragment {
 
         listView = view.findViewById(R.id.history_list);
         searchInput = view.findViewById(R.id.search_input);
+        btnRefresh = view.findViewById(R.id.btnRefresh);
 
         MainActivity mainActivity = (MainActivity) getActivity();
         historyList = mainActivity.getHistoryList();
@@ -95,6 +109,10 @@ public class HistoryFragment extends Fragment {
         ImageView filterButton = view.findViewById(R.id.filter);
         filterButton.setOnClickListener(v -> showFilterDialog());
 
+        btnRefresh.setOnClickListener(v -> {
+            btnRefresh.setEnabled(false); // 🔒 Vô hiệu hóa khi đang tải
+            fetchHistoryList();
+        });
 
         return view;
     }
@@ -231,6 +249,51 @@ public class HistoryFragment extends Fragment {
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();
         btnClose.setOnClickListener(v -> dialog.dismiss());
+    }
+
+    private void fetchHistoryList() {
+        Request request = new Request.Builder()
+                .url(ApiConfig.BASE_URL + "/history/history-list")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                if (getActivity() != null) {
+                    getActivity().runOnUiThread(() -> {
+                        Toast.makeText(getContext(), "Không thể kết nối server", Toast.LENGTH_SHORT).show();
+                        btnRefresh.setEnabled(true); // 🔓 Bật lại nút khi thất bại
+                    });
+                }
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    List<History> newHistories = gson.fromJson(json, new TypeToken<List<History>>(){}.getType());
+
+                    getActivity().runOnUiThread(() -> {
+                        historyList = newHistories;
+                        ((MainActivity)getActivity()).setHistoryList(newHistories);
+
+                        HistoryList = new ArrayList<>(historyList);  // cập nhật nguồn dữ liệu cho filter & search
+                        adapter.updateData(HistoryList);             // dùng adapter hiện có
+                        adapter.notifyDataSetChanged();
+                        btnRefresh.setEnabled(true);
+                    });
+
+                } else {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(() -> {
+                            Toast.makeText(getContext(), "Lỗi từ server", Toast.LENGTH_SHORT).show();
+                            btnRefresh.setEnabled(true); // 🔓 Bật lại nút khi có lỗi từ server
+                        });
+                    }
+                }
+            }
+        });
     }
 
 }

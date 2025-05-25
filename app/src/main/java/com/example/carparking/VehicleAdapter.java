@@ -21,7 +21,7 @@ public class VehicleAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return vehicles.size();
+        return vehicles == null ? 0 : vehicles.size();
     }
 
     @Override

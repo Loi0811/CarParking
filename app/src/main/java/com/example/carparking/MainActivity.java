@@ -1,6 +1,7 @@
 package com.example.carparking;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,15 +12,29 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 public class MainActivity extends AppCompatActivity {
 
     BottomNavigationView bottomNavigationView;
-    private List<Vehicle> vehicleList;
-    private List<History> historyList;
+    private List<Vehicle> vehicleList = new ArrayList<>();   // KHÔNG để null
+    private List<History> historyList = new ArrayList<>();
     private Fragment parkingFragment, streamCameraFragment, historyFragment;
+    private OkHttpClient client = new OkHttpClient();
+    private Gson gson = new Gson();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,23 +45,8 @@ public class MainActivity extends AppCompatActivity {
         streamCameraFragment = new StreamCameraFragment();
         historyFragment = new HistoryFragment();
 
-        vehicleList = Arrays.asList(
-                new Vehicle("Car001", "29-AB 12345"),
-                new Vehicle("Car002", "30-A1 23456"),
-                new Vehicle("Car003", "59-A1 21456")
-        );
-
-        historyList = Arrays.asList(
-                new History(0, "12-4-2025T08:00:00", "Car001", "29-AB 12345",true),
-                new History(0, "12-4-2025T10:30:00", "Car002", "30-A1 23456",false),
-                new History(1, "12-4-2025T12:15:00", "Car001", "29-AB 12345",false),
-                new History(0, "12-4-2025T14:15:00", "Car003", "59-A1 21456",true),
-                new History(0, "12-4-2025T14:30:00", "Car001", "29-AB 12345",false),
-                new History(0, "10-4-2025T08:00:00", "Car004", "29-AB 12305",true),
-                new History(1, "10-4-2025T10:00:00", "Car004", "29-AB 12305",false),
-                new History(0, "14-4-2025T10:00:00", "Car005", "74-AB 10305",true),
-                new History(1, "14-4-2025T12:00:00", "Car005", "74-AB 10305",false)
-        );
+        fetchVehicleListFromAPI();
+        fetchHistoryListFromAPI();
 
         bottomNavigationView = findViewById(R.id.bottom_navigation);
 
@@ -72,12 +72,73 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
     }
 
+    private void fetchVehicleListFromAPI() {
+        Request request = new Request.Builder()
+                .url(ApiConfig.BASE_URL + "/parking/parking-list") // Ví dụ URL
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    vehicleList = gson.fromJson(json, new TypeToken<List<Vehicle>>(){}.getType());
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Đã lấy danh sách xe", Toast.LENGTH_SHORT).show();
+                        ParkingFragment pf = (ParkingFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                        if (pf != null) {
+                            pf.updateList(vehicleList);
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    private void fetchHistoryListFromAPI() {
+        Request request = new Request.Builder()
+                .url(ApiConfig.BASE_URL + "/history/history-list") // Ví dụ URL
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    String json = response.body().string();
+                    historyList = gson.fromJson(json, new TypeToken<List<History>>(){}.getType());
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Đã lấy lịch sử", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+        });
+    }
+
+
     public List<Vehicle> getVehicleList() {
         return vehicleList;
     }
 
     public List<History> getHistoryList() {
         return historyList;
+    }
+
+    public void setVehicleList(List<Vehicle> list) {
+        this.vehicleList = list;
+    }
+
+    public void setHistoryList(List<History> list) {
+        this.historyList = list;
     }
 
 }

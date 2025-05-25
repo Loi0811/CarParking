@@ -18,8 +18,20 @@
     <ListView
         android:id="@+id/parking_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:layout_marginHorizontal="16dp"
         android:scrollbars="none"/>
+
+    <Button
+        android:id="@+id/btnRefresh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Refresh"
+        android:layout_margin="8dp"
+        android:layout_gravity="end"
+        android:backgroundTint="@color/dark_gray"
+        />
+
 
 </LinearLayout>
