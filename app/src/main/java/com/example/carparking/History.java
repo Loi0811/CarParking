@@ -7,6 +7,7 @@ public class History {
     String plate;
     Boolean first_time;
     String token;
+    String imageUrl;
 
     public History(Integer in_or_out, String time, String id, String plate, Boolean first_time) {
         this.in_or_out = in_or_out;
@@ -34,6 +35,14 @@ public class History {
 
     public Boolean getFirst_time() {
         return first_time;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }
 

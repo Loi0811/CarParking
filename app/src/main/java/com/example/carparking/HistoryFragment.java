@@ -35,6 +35,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -229,11 +230,22 @@ public class HistoryFragment extends Fragment {
         TextView timeView = dialogView.findViewById(R.id.time);
         TextView actionText = dialogView.findViewById(R.id.action);
         ImageView actionImage = dialogView.findViewById(R.id.action_icon);
+        ImageView plateImage = dialogView.findViewById(R.id.image_preview);
         Button btnClose = dialogView.findViewById(R.id.btn_close);
 
         idView.setText(history.getId());
         plateView.setText(history.getPlate());
         timeView.setText(history.getTime());
+        if (history.getImageUrl() != null && !history.getImageUrl().isEmpty()) {
+            Glide.with(dialogView.getContext())
+                    .load(history.getImageUrl())
+                    .placeholder(R.drawable.placeholder) // ảnh tạm khi loading
+                    .error(R.drawable.error_image)       // ảnh hiển thị nếu lỗi
+                    .into(plateImage);
+        } else {
+            plateImage.setImageResource(R.drawable.placeholder);
+        }
+
 
 
         if (history.getIn_or_out() == 0) {
