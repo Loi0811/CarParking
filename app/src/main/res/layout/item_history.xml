@@ -24,25 +24,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textStyle="bold"
-            android:textSize="16dp"/>
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/tv_time"
             android:text="08:00"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15dp"/>
+            android:textSize="16dp"/>
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/first_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:text="New"
-        android:textSize="15dp"
-        android:textColor="@android:color/holo_red_light"
-        android:textStyle="bold"
-        android:layout_marginEnd="10dp"/>
 </LinearLayout>

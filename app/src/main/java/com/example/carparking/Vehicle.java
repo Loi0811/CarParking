@@ -4,9 +4,6 @@ import com.google.gson.annotations.SerializedName;
 
 public class Vehicle {
 
-    @SerializedName("_id")
-    String id;
-
     String plate;
     String token;
 
@@ -14,8 +11,7 @@ public class Vehicle {
     public Vehicle() {}
 
     // Constructor dùng khi cần khởi tạo thủ công
-    public Vehicle(String id, String plate, String token) {
-        this.id = id;
+    public Vehicle(String plate, String token) {
         this.plate = plate;
         this.token = token;
     }

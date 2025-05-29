@@ -49,14 +49,12 @@ public class HistoryAdapter extends BaseAdapter implements Filterable {
         ImageView tvIcon = convertView.findViewById(R.id.tv_icon);
         TextView tvTime = convertView.findViewById(R.id.tv_time);
         TextView tvInfo = convertView.findViewById(R.id.tv_vehicle_info);
-        TextView tvNew = convertView.findViewById(R.id.first_time);
 
         History history = filteredList.get(pos);
         if (history.in_or_out == 0) tvIcon.setImageResource(R.drawable.ic_in);
         else tvIcon.setImageResource(R.drawable.ic_out);
         tvTime.setText(history.time);
-        tvInfo.setText("ID: " + history.id + " - " + history.plate);
-        if (history.first_time) tvNew.setText("New"); else tvNew.setText("");
+        tvInfo.setText("Biến số: " + history.plate);
         return convertView;
     }
 

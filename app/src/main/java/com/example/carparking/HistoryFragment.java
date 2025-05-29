@@ -124,7 +124,6 @@ public class HistoryFragment extends Fragment {
         RadioGroup timeFilterGroup = dialogView.findViewById(R.id.time_filter_group);
         CheckBox checkboxEntry = dialogView.findViewById(R.id.checkbox_entry);
         CheckBox checkboxExit = dialogView.findViewById(R.id.checkbox_exit);
-        CheckBox checkboxFirst = dialogView.findViewById(R.id.checkbox_first);
         Button btnApply = dialogView.findViewById(R.id.btn_apply_filter);
 
         // Gán lại lựa chọn trước đó
@@ -141,7 +140,6 @@ public class HistoryFragment extends Fragment {
         }
         checkboxEntry.setChecked(lastEntryFilter);
         checkboxExit.setChecked(lastExitFilter);
-        checkboxFirst.setChecked(lastFirstTimeFilter);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setView(dialogView);
@@ -163,7 +161,6 @@ public class HistoryFragment extends Fragment {
 
             lastEntryFilter = checkboxEntry.isChecked();
             lastExitFilter = checkboxExit.isChecked();
-            lastFirstTimeFilter = checkboxFirst.isChecked();
 
             applyFilters(lastTimeFilter, lastEntryFilter, lastExitFilter, lastFirstTimeFilter);
             dialog.dismiss();
@@ -198,9 +195,6 @@ public class HistoryFragment extends Fragment {
             if (!filterEntry && history.getIn_or_out() == 0) continue;
             if (!filterExit && history.getIn_or_out() == 1) continue;
 
-            // Lọc lần đầu
-            if (filterFirst && !history.getFirst_time()) continue;
-
             filteredList.add(history);
         }
 
@@ -225,7 +219,6 @@ public class HistoryFragment extends Fragment {
         View dialogView = inflater.inflate(R.layout.dialog_detail_history, null);
 
 
-        TextView idView = dialogView.findViewById(R.id.id);
         TextView plateView = dialogView.findViewById(R.id.license_plate);
         TextView timeView = dialogView.findViewById(R.id.time);
         TextView actionText = dialogView.findViewById(R.id.action);
@@ -233,7 +226,6 @@ public class HistoryFragment extends Fragment {
         ImageView plateImage = dialogView.findViewById(R.id.image_preview);
         Button btnClose = dialogView.findViewById(R.id.btn_close);
 
-        idView.setText(history.getId());
         plateView.setText(history.getPlate());
         timeView.setText(history.getTime());
         if (history.getImageUrl() != null && !history.getImageUrl().isEmpty()) {

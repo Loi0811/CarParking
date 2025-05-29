@@ -39,11 +39,9 @@ public class VehicleAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = LayoutInflater.from(context).inflate(R.layout.item_vehicle, parent, false);
 
-        TextView tvId = convertView.findViewById(R.id.tv_vehicle_id);
         TextView tvPlate = convertView.findViewById(R.id.tv_plate_number);
 
         Vehicle vehicle = vehicles.get(pos);
-        tvId.setText("ID: " + vehicle.id);
         tvPlate.setText("Biển số: " + vehicle.plate);
 
         return convertView;

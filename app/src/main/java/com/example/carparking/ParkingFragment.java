@@ -49,7 +49,7 @@ public class ParkingFragment extends Fragment {
 
         VehicleAdapter adapter = new VehicleAdapter(getContext(), vehicles);
         listView.setAdapter(adapter);
-        countText.setText("Total: " + vehicles.size());
+        countText.setText("Tổng số xe: " + vehicles.size());
 
         btnRefresh.setOnClickListener(v -> {
             btnRefresh.setEnabled(false); // 🔒 Vô hiệu hóa khi đang tải
@@ -64,7 +64,7 @@ public class ParkingFragment extends Fragment {
         if (listView != null && getContext() != null) {
             VehicleAdapter adapter = new VehicleAdapter(getContext(), vehicles);
             listView.setAdapter(adapter);
-            countText.setText("Total: " + vehicles.size());
+            countText.setText("Tổng số xe: " + vehicles.size());
         }
     }
 
@@ -96,7 +96,7 @@ public class ParkingFragment extends Fragment {
                         ((MainActivity)getActivity()).setVehicleList(newVehicles);
                         VehicleAdapter adapter = new VehicleAdapter(getContext(), vehicles);
                         listView.setAdapter(adapter);
-                        countText.setText("Total: " + vehicles.size());
+                        countText.setText("Tổng số xe: " + vehicles.size());
                         btnRefresh.setEnabled(true); // 🔓 Bật lại nút khi thành công
                     });
                 } else {

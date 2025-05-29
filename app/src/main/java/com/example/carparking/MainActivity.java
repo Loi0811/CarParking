@@ -42,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         parkingFragment = new ParkingFragment();
-        streamCameraFragment = new StreamCameraFragment();
         historyFragment = new HistoryFragment();
 
         fetchVehicleListFromAPI();
@@ -56,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
             Fragment fragment;
             if (item.getItemId() == R.id.nav_parking) {
                 fragment = parkingFragment;
-            } else if (item.getItemId() == R.id.nav_camera) {
-                fragment = streamCameraFragment;
-            } else {
+            }  else {
                 fragment = historyFragment;
             }
             loadFragment(fragment);
