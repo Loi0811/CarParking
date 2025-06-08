@@ -1,5 +1,6 @@
 package com.example.carparking;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,7 @@ public class ParkingFragment extends Fragment {
 
     private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
+    private String uid;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -46,6 +48,7 @@ public class ParkingFragment extends Fragment {
 
         MainActivity mainActivity = (MainActivity) getActivity();
         vehicles = mainActivity.getVehicleList();
+        uid = mainActivity.getUid();
 
         VehicleAdapter adapter = new VehicleAdapter(getContext(), vehicles);
         listView.setAdapter(adapter);
@@ -70,7 +73,7 @@ public class ParkingFragment extends Fragment {
 
     private void fetchVehicleList() {
         Request request = new Request.Builder()
-                .url(ApiConfig.BASE_URL + "/parking/parking-list")
+                .url(ApiConfig.BASE_URL + "/parking/parking-list?uid=" + uid)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -110,6 +113,8 @@ public class ParkingFragment extends Fragment {
             }
         });
     }
+
+
 }
 
 

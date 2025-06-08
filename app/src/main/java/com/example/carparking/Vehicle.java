@@ -15,6 +15,14 @@ public class Vehicle {
         this.plate = plate;
         this.token = token;
     }
+
+    public String getPlate() {
+        return plate;
+    }
+
+    public void setPlate(String plate) {
+        this.plate = plate;
+    }
 }
 
 
