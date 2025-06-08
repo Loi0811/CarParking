@@ -1,5 +1,6 @@
 package com.example.carparking;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -34,12 +35,16 @@ public class MainActivity extends AppCompatActivity {
     private Fragment parkingFragment, streamCameraFragment, historyFragment;
     private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
+    private String uid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
+        uid = intent.getStringExtra("uid");
 
         parkingFragment = new ParkingFragment();
         historyFragment = new HistoryFragment();
@@ -71,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchVehicleListFromAPI() {
         Request request = new Request.Builder()
-                .url(ApiConfig.BASE_URL + "/parking/parking-list") // Ví dụ URL
+                .url(ApiConfig.BASE_URL + "/parking/parking-list?uid=" + uid) // Ví dụ URL
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -99,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fetchHistoryListFromAPI() {
         Request request = new Request.Builder()
-                .url(ApiConfig.BASE_URL + "/history/history-list") // Ví dụ URL
+                .url(ApiConfig.BASE_URL + "/history/history-list?uid=" + uid) // Ví dụ URL
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -129,6 +134,8 @@ public class MainActivity extends AppCompatActivity {
     public List<History> getHistoryList() {
         return historyList;
     }
+
+    public String getUid(){return uid;}
 
     public void setVehicleList(List<Vehicle> list) {
         this.vehicleList = list;

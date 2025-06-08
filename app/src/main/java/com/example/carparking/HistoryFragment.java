@@ -61,6 +61,7 @@ public class HistoryFragment extends Fragment {
 
     private OkHttpClient client = new OkHttpClient();
     private Gson gson = new Gson();
+    private String uid;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -73,6 +74,7 @@ public class HistoryFragment extends Fragment {
 
         MainActivity mainActivity = (MainActivity) getActivity();
         historyList = mainActivity.getHistoryList();
+        uid = mainActivity.getUid();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy'T'HH:mm:ss", Locale.getDefault());
 
@@ -257,7 +259,7 @@ public class HistoryFragment extends Fragment {
 
     private void fetchHistoryList() {
         Request request = new Request.Builder()
-                .url(ApiConfig.BASE_URL + "/history/history-list")
+                .url(ApiConfig.BASE_URL + "/history/history-list?uid=" + uid)
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
